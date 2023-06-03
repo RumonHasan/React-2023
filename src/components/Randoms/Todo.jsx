@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   addTodo,
@@ -7,6 +7,7 @@ import {
   buttonStateControls,
 } from '../../store/slices';
 import { nanoid } from '@reduxjs/toolkit';
+import supabase from '../../database/supabase';
 
 export const Todo = () => {
   const todos = useSelector((state) => state.generalReducer.todos);
@@ -14,6 +15,22 @@ export const Todo = () => {
   const [input, setInput] = useState('');
   const [submitButtonState, setSubmitButtonState] = useState(false);
   const [editId, setEditId] = useState('');
+  const [data, setData] = useState('');
+
+  // fetching data from supabase
+  useEffect(() => {
+    const fetchData = async () => {
+      const { data, error } = await supabase.from('todos').select('*');
+      if (data) {
+        setData(data);
+      } else {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  console.log(data);
 
   // edit todo function
   const editTodoFunction = (editId, inputVal, editLimit) => {

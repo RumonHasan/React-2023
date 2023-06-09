@@ -6,11 +6,16 @@ import {
   editTodo,
   buttonStateControls,
 } from '../../store/slices';
+import { toggleTheme } from '../../store/themeSlice';
 import { nanoid } from '@reduxjs/toolkit';
 import supabase from '../../database/supabase';
 
 export const Todo = () => {
   const todos = useSelector((state) => state.generalReducer.todos);
+  const currentTheme = useSelector(
+    (state) => state.themeReducer.themeState.state
+  );
+  console.log(currentTheme);
   const dispatchControl = useDispatch();
   const [input, setInput] = useState('');
   const [submitButtonState, setSubmitButtonState] = useState(false);
@@ -29,8 +34,6 @@ export const Todo = () => {
     };
     fetchData();
   }, []);
-
-  console.log(data);
 
   // edit todo function
   const editTodoFunction = (editId, inputVal, editLimit) => {
@@ -94,7 +97,7 @@ export const Todo = () => {
   };
 
   return (
-    <div>
+    <div style={{ background: !currentTheme ? 'black' : 'blue' }}>
       <ul>
         {todos.map((todo, index) => {
           return (
@@ -125,6 +128,9 @@ export const Todo = () => {
         />
         <button onClick={() => handleAddSomething()}>
           {submitButtonState ? 'Edit' : 'Add'}
+        </button>
+        <button onClick={() => dispatchControl(toggleTheme())}>
+          Switch Theme
         </button>
       </div>
     </div>

@@ -26,7 +26,7 @@ const generalSlices = createSlice({
     // adding a basic todo
     addTodo(state, action) {
       const newTodo = action.payload;
-      state.todos.push(newTodo);
+      state.todos.push(newTodo); // direct addition without any return
       return state;
     },
     // deleting a single todo
